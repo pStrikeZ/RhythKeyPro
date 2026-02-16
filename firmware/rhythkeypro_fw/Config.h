@@ -101,6 +101,22 @@ struct GameConfig {
 
         uint8_t count = 4;
     } sideKeyMask;
+
+    // 长按触发配置（仅在 ONGEKI 模式下生效）
+    struct LongPressConfig {
+        struct LongPressButton {
+            uint8_t row;
+            uint8_t col;
+        };
+
+        LongPressButton buttons[2] = {
+            {2, 1}, // 左菜单键
+            {1, 4}  // 右菜单键
+        };
+
+        uint8_t count = 2;
+        unsigned long holdDuration = 3000; // 毫秒
+    } longPress;
 };
 
 // 枚举定义

@@ -5,12 +5,13 @@
 #include "Config.h"
 #include "LEDController.h"
 #include "EncoderController.h"
+#include "PotentiometerController.h"
 #include "ButtonMatrix.h"
 #include "ModeManager.h"
 
 class RhythKeyController {
 public:
-    RhythKeyController();
+    RhythKeyController() = default;
     ~RhythKeyController() = default;
 
     // 初始化控制器
@@ -26,21 +27,9 @@ public:
 private:
     LEDController ledController;
     EncoderController encoderController;
+    PotentiometerController potController;
     ButtonMatrix buttonMatrix;
     ModeManager modeManager;
-
-    // 电位器相关
-    int potValue;
-    int prevPotValue;
-
-    // 处理电位器输入
-    void processPotentiometer();
-
-    // 更新左摇杆位置（基于电位器）
-    void updateLeftStick(int potValue);
-
-    // 初始化电位器
-    void initPotentiometer();
 };
 
 #endif // RHYTHKEY_CONTROLLER_H

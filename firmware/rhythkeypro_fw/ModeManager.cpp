@@ -1,6 +1,12 @@
 #include "ModeManager.h"
 
 ModeManager::ModeManager() : currentMode(MODE_ONGEKI) {
+    // 初始化长按状态
+    for (uint8_t i = 0; i < 2; i++) {
+        longPressState[i].pressStartTime = 0;
+        longPressState[i].tracking = false;
+        longPressState[i].pressSent = false;
+    }
 }
 
 void ModeManager::processButtons(const bool currentState[3][6], const bool prevState[3][6]) {
@@ -10,6 +16,15 @@ void ModeManager::processButtons(const bool currentState[3][6], const bool prevS
             if (row == TOGGLE_ROW && col == TOGGLE_COL) {
                 handleToggle(currentState[row][col], prevState[row][col]);
                 continue;
+            }
+
+            // ONGEKI 模式下检查是否为长按按键
+            if (currentMode == MODE_ONGEKI) {
+                int8_t lpIndex = getLongPressIndex(row, col);
+                if (lpIndex >= 0) {
+                    handleLongPressButton(currentState[row][col], row, col, lpIndex);
+                    continue;
+                }
             }
 
             // 普通按键：通过过滤层发送事件
@@ -32,6 +47,20 @@ void ModeManager::handleToggle(bool currentState, bool previousState) {
         // 切换后如果新模式有屏蔽按键，释放它们
         if (currentMode == MODE_VARIOUS) {
             releaseMaskedKeys();
+        }
+
+        // 切换模式时重置所有长按状态
+        for (uint8_t i = 0; i < gameConfig.longPress.count; i++) {
+            if (longPressState[i].pressSent) {
+                uint16_t buttonCode = gameConfig.buttonMap
+                    [gameConfig.longPress.buttons[i].row]
+                    [gameConfig.longPress.buttons[i].col];
+                if (buttonCode != 0) {
+                    XInput.release(buttonCode);
+                }
+            }
+            longPressState[i].tracking = false;
+            longPressState[i].pressSent = false;
         }
     }
 }
@@ -58,6 +87,48 @@ void ModeManager::sendButtonEvent(bool currentState, bool previousState, uint8_t
     } else if (currentState == HIGH && previousState == LOW) {
         // 按键松开
         XInput.release(buttonCode);
+    }
+}
+
+int8_t ModeManager::getLongPressIndex(uint8_t row, uint8_t col) const {
+    for (uint8_t i = 0; i < gameConfig.longPress.count; i++) {
+        if (gameConfig.longPress.buttons[i].row == row &&
+            gameConfig.longPress.buttons[i].col == col) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void ModeManager::handleLongPressButton(bool currentState, uint8_t row, uint8_t col, uint8_t index) {
+    uint16_t buttonCode = gameConfig.buttonMap[row][col];
+    if (buttonCode == 0) return;
+
+    LongPressState& state = longPressState[index];
+
+    if (currentState == LOW) {
+        // 按键处于按下状态
+        if (!state.tracking) {
+            // 刚按下，开始追踪
+            state.tracking = true;
+            state.pressStartTime = millis();
+            state.pressSent = false;
+        } else if (!state.pressSent) {
+            // 持续按住，检查是否达到长按阈值
+            if (millis() - state.pressStartTime >= gameConfig.longPress.holdDuration) {
+                XInput.press(buttonCode);
+                state.pressSent = true;
+            }
+        }
+    } else {
+        // 按键松开
+        if (state.pressSent) {
+            // 长按已触发过，立即发送释放
+            XInput.release(buttonCode);
+        }
+        // 重置追踪状态
+        state.tracking = false;
+        state.pressSent = false;
     }
 }
 

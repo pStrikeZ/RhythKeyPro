@@ -28,6 +28,14 @@ private:
     static const uint8_t TOGGLE_ROW = 0;
     static const uint8_t TOGGLE_COL = 5;
 
+    // 长按状态追踪
+    struct LongPressState {
+        unsigned long pressStartTime; // 按下起始时间
+        bool tracking;               // 正在追踪中（物理按下但未达到阈值）
+        bool pressSent;              // 已发送按下事件
+    };
+    LongPressState longPressState[2]; // 与 gameConfig.longPress.count 对应
+
     // 处理模式切换键
     void handleToggle(bool currentState, bool previousState);
 
@@ -39,6 +47,10 @@ private:
 
     // 发送单个按键的 XInput 事件
     void sendButtonEvent(bool currentState, bool previousState, uint8_t row, uint8_t col);
+
+    // 长按按键处理
+    int8_t getLongPressIndex(uint8_t row, uint8_t col) const;
+    void handleLongPressButton(bool currentState, uint8_t row, uint8_t col, uint8_t index);
 };
 
 #endif // MODE_MANAGER_H
