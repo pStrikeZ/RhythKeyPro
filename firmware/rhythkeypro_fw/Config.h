@@ -54,7 +54,7 @@ struct GameConfig {
 
     // LED主题色彩
     struct LEDTheme {
-        CRGB enabled[12] = {
+        CRGB ongeki[12] = {
             CRGB(128,0,128),    // 1 紫色，左侧键
             CRGB::Red,          // 2 红色，左菜单键
             CRGB::Red,          // 3 红色，左红
@@ -69,7 +69,7 @@ struct GameConfig {
             CRGB(128,0,128)     // 12 紫色，右侧键
         };
 
-        CRGB disabled[12] = {
+        CRGB various[12] = {
             CRGB::Black,        // 1 熄灭，左侧键
             CRGB::Black,        // 2 熄灭，左菜单键
             CRGB::White,        // 3 白色，左红
@@ -104,6 +104,12 @@ struct GameConfig {
 };
 
 // 枚举定义
+enum ControllerMode {
+    MODE_ONGEKI = 0,
+    MODE_VARIOUS,
+    MODE_COUNT  // 哨兵值，必须始终在最后
+};
+
 enum ButtonIndex {
     BTN_LEFT = 0,
     BTN_LEFT_MENU,

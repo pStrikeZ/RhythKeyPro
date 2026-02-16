@@ -12,8 +12,8 @@ public:
     // 初始化LED
     void begin();
 
-    // 更新LED显示状态
-    void update(bool sideKeyEnabled);
+    // 更新LED显示（接收当前模式对应的主题色数组）
+    void update(const CRGB* theme);
 
     // 设置LED亮度
     void setBrightness(uint8_t brightness);
@@ -26,7 +26,7 @@ private:
     bool initialized;
 
     // 应用LED主题
-    void applyTheme(bool sideKeyEnabled);
+    void applyTheme(const CRGB* theme);
 
     // 显示更新
     void show();

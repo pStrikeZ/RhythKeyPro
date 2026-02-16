@@ -22,10 +22,10 @@ void LEDController::begin() {
     initialized = true;
 }
 
-void LEDController::update(bool sideKeyEnabled) {
+void LEDController::update(const CRGB* theme) {
     if (!initialized || !leds) return;
 
-    applyTheme(sideKeyEnabled);
+    applyTheme(theme);
     show();
 }
 
@@ -37,15 +37,11 @@ void LEDController::setBrightness(uint8_t brightness) {
     show();
 }
 
-void LEDController::applyTheme(bool sideKeyEnabled) {
-    if (!leds) return;
-
-    const CRGB* themeColors = sideKeyEnabled ?
-        gameConfig.ledTheme.enabled :
-        gameConfig.ledTheme.disabled;
+void LEDController::applyTheme(const CRGB* theme) {
+    if (!leds || !theme) return;
 
     for (uint8_t i = 0; i < hardwareConfig.led.count; i++) {
-        leds[i] = themeColors[i];
+        leds[i] = theme[i];
     }
 }
 

@@ -6,6 +6,7 @@
 #include "LEDController.h"
 #include "EncoderController.h"
 #include "ButtonMatrix.h"
+#include "ModeManager.h"
 
 class RhythKeyController {
 public:
@@ -18,16 +19,15 @@ public:
     // 主循环更新
     void update();
 
-    // 获取状态信息
-    bool isSideKeyEnabled() const { return buttonMatrix.isSideKeyEnabled(); }
-
-    // 手动控制LED更新
-    void updateLEDs() { ledController.update(buttonMatrix.isSideKeyEnabled()); }
+    // 获取当前模式
+    ControllerMode getMode() const { return modeManager.getMode(); }
+    bool isOngekiMode() const { return modeManager.isOngekiMode(); }
 
 private:
     LEDController ledController;
     EncoderController encoderController;
     ButtonMatrix buttonMatrix;
+    ModeManager modeManager;
 
     // 电位器相关
     int potValue;

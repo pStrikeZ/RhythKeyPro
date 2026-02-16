@@ -19,21 +19,24 @@ void RhythKeyController::begin() {
     initPotentiometer();
 
     // 初始化LED显示
-    updateLEDs();
+    ledController.update(modeManager.getLEDTheme());
 }
 
 void RhythKeyController::update() {
-    // 扫描按钮矩阵
+    // 1. 扫描按钮矩阵（纯硬件读取）
     buttonMatrix.scan();
 
-    // 处理电位器
+    // 2. 模式管理器处理按键事件（切换检测 + 过滤 + XInput 发送）
+    modeManager.processButtons(buttonMatrix.getState(), buttonMatrix.getPrevState());
+
+    // 3. 处理电位器
     processPotentiometer();
 
-    // 更新编码器
+    // 4. 更新编码器
     encoderController.update();
 
-    // 更新LED显示
-    updateLEDs();
+    // 5. 更新LED显示（由模式管理器提供当前主题）
+    ledController.update(modeManager.getLEDTheme());
 }
 
 void RhythKeyController::processPotentiometer() {

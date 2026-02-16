@@ -88,7 +88,9 @@
 
 ## 固件烧录
 
-WIP
+https://github.com/dmadison/ArduinoXInput_Sparkfun
+
+https://raw.githubusercontent.com/dmadison/ArduinoXInput_Boards/master/package_dmadison_xinput_index.json
 
 ## 游戏设置
 
