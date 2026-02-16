@@ -25,8 +25,8 @@ private:
     // ONGEKI 模式：映射到左右线性扳机
     void updateTriggers();
 
-    // VARIOUS 模式：映射到右摇杆Y轴
-    void updateRightStickY();
+    // VARIOUS 模式：映射到右摇杆X轴
+    void updateRightStickX();
 };
 
 #endif // POTENTIOMETER_CONTROLLER_H

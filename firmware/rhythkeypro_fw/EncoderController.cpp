@@ -2,7 +2,7 @@
 #include <XInput.h>
 
 EncoderController::EncoderController() :
-    leftJoystickX(0), rightJoystickX(0) {
+    leftJoystickX(0), leftJoystickY(0) {
 }
 
 void EncoderController::begin() {
@@ -22,8 +22,8 @@ void EncoderController::begin() {
     encoder2.pinA_prev = digitalRead(hardwareConfig.pins.encoder[2]);
     encoder2.pinB_prev = digitalRead(hardwareConfig.pins.encoder[3]);
     encoder2.state = (encoder2.pinA_prev << 1) | encoder2.pinB_prev;
-    encoder2.position = rightJoystickX;
-    encoder2.name = "右摇杆X轴";
+    encoder2.position = leftJoystickY;
+    encoder2.name = "左摇杆Y轴";
 }
 
 void EncoderController::update() {
@@ -33,18 +33,18 @@ void EncoderController::update() {
 
     // 同步位置变量
     leftJoystickX = encoder1.position;
-    rightJoystickX = encoder2.position;
+    leftJoystickY = encoder2.position;
 
     // 发送到XInput
     XInput.setJoystickX(JOY_LEFT, leftJoystickX);
-    XInput.setJoystickX(JOY_RIGHT, rightJoystickX);
+    XInput.setJoystickY(JOY_LEFT, leftJoystickY);
 }
 
 void EncoderController::resetPositions() {
     encoder1.position = 0;
     encoder2.position = 0;
     leftJoystickX = 0;
-    rightJoystickX = 0;
+    leftJoystickY = 0;
 }
 
 void EncoderController::updateSingleEncoder(EncoderState& encoder, uint8_t pinA, uint8_t pinB) {

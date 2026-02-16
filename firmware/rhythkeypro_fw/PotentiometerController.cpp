@@ -22,9 +22,9 @@ void PotentiometerController::update(ControllerMode mode) {
     if (mode == MODE_ONGEKI) {
         updateTriggers();
         // 清除 various 模式的摇杆映射
-        XInput.setJoystickY(JOY_RIGHT, 0);
+        XInput.setJoystickX(JOY_RIGHT, 0);
     } else {
-        updateRightStickY();
+        updateRightStickX();
         // 清除 ongeki 模式的扳机映射
         XInput.setTrigger(TRIGGER_LEFT, 0);
         XInput.setTrigger(TRIGGER_RIGHT, 0);
@@ -63,7 +63,7 @@ void PotentiometerController::updateTriggers() {
     prevPotValue = potValue;
 }
 
-void PotentiometerController::updateRightStickY() {
+void PotentiometerController::updateRightStickX() {
     // 应用死区
     int potDelta = abs(potValue - prevPotValue);
     if (potDelta <= hardwareConfig.pot.deadzone) {
@@ -71,10 +71,10 @@ void PotentiometerController::updateRightStickY() {
     }
 
     // 电位器偏左→摇杆偏下（负值），偏右→摇杆偏上（正值）
-    int16_t joystickY = map(potValue, 0, hardwareConfig.pot.maxValue,
+    int16_t joystickX = map(potValue, 0, hardwareConfig.pot.maxValue,
         hardwareConfig.encoder.joystickMin, hardwareConfig.encoder.joystickMax);
 
-    XInput.setJoystickY(JOY_RIGHT, joystickY);
+    XInput.setJoystickX(JOY_RIGHT, joystickX);
 
     prevPotValue = potValue;
 }

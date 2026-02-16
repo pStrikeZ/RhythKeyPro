@@ -17,7 +17,7 @@ public:
 
     // 获取摇杆位置
     int16_t getLeftJoystickX() const { return leftJoystickX; }
-    int16_t getRightJoystickX() const { return rightJoystickX; }
+    int16_t getLeftJoystickY() const { return leftJoystickY; }
 
     // 重置编码器位置
     void resetPositions();
@@ -33,10 +33,10 @@ private:
     };
 
     EncoderState encoder1; // 左摇杆X轴
-    EncoderState encoder2; // 右摇杆X轴
+    EncoderState encoder2; // 左摇杆Y轴
 
     int16_t leftJoystickX;
-    int16_t rightJoystickX;
+    int16_t leftJoystickY;
 
     // 正交编码器状态机方向检测
     EncoderDirection getEncoderDirection(uint8_t oldState, uint8_t newState);
