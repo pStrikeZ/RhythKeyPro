@@ -1,6 +1,6 @@
 #include "ModeManager.h"
 
-ModeManager::ModeManager() : currentMode(MODE_ONGEKI) {
+ModeManager::ModeManager() : currentMode(MODE_ONGEKI), modeChanged(false) {
     // 初始化长按状态
     for (uint8_t i = 0; i < 2; i++) {
         longPressState[i].pressStartTime = 0;
@@ -43,6 +43,7 @@ void ModeManager::handleToggle(bool currentState, bool previousState) {
 
         // 循环切换到下一个模式
         currentMode = static_cast<ControllerMode>((currentMode + 1) % MODE_COUNT);
+        modeChanged = true;
 
         // 切换后如果新模式有屏蔽按键，释放它们
         if (currentMode == MODE_VARIOUS) {

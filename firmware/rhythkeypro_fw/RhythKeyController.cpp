@@ -23,10 +23,15 @@ void RhythKeyController::update() {
     // 2. 模式管理器处理按键事件（切换检测 + 过滤 + XInput 发送）
     modeManager.processButtons(buttonMatrix.getState(), buttonMatrix.getPrevState());
 
-    // 3. 处理电位器（模式感知）
+    // 3. 模式切换时重置编码器位置
+    if (modeManager.consumeModeChanged()) {
+        encoderController.resetPositions();
+    }
+
+    // 4. 处理电位器（模式感知）
     potController.update(modeManager.getMode());
 
-    // 4. 更新编码器
+    // 5. 更新编码器
     encoderController.update();
 
     // 5. 更新LED显示（由模式管理器提供当前主题）

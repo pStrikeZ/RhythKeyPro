@@ -21,8 +21,12 @@ public:
     ControllerMode getMode() const { return currentMode; }
     bool isOngekiMode() const { return currentMode == MODE_ONGEKI; }
 
+    // 检测并消费模式变更事件（调用后自动清除标志）
+    bool consumeModeChanged() { bool changed = modeChanged; modeChanged = false; return changed; }
+
 private:
     ControllerMode currentMode;
+    bool modeChanged;
 
     // 切换键在矩阵中的坐标
     static const uint8_t TOGGLE_ROW = 0;
