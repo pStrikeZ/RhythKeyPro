@@ -13,6 +13,7 @@
 * SOUND VOLTEX  
 * DJMAX RESPECT V
 * osu!mania
+* In Falsus
 
 还有一些未经测试但理论上来说能玩的游戏，例如 osu 的其他模式、初音未来：歌姬计划等。
 
