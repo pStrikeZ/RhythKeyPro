@@ -29,7 +29,7 @@ void EncoderController::begin() {
 void EncoderController::update() {
     // 更新两个编码器
     updateSingleEncoder(encoder1, hardwareConfig.pins.encoder[0], hardwareConfig.pins.encoder[1]);
-    updateSingleEncoder(encoder2, hardwareConfig.pins.encoder[2], hardwareConfig.pins.encoder[3]);
+    updateSingleEncoder(encoder2, hardwareConfig.pins.encoder[3], hardwareConfig.pins.encoder[2]);
 
     // 同步位置变量
     leftJoystickX = encoder1.position;
