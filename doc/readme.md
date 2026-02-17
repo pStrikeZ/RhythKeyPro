@@ -88,9 +88,49 @@
 
 ## 固件烧录
 
-https://github.com/dmadison/ArduinoXInput_Sparkfun
+### 第一次刷入
 
-https://raw.githubusercontent.com/dmadison/ArduinoXInput_Boards/master/package_dmadison_xinput_index.json
+首先下载并安装 [Arduino IDE](https://www.arduino.cc/en/software)，打开 Preferences 选项卡。
+
+在 Additional Boards Manager URLs 中填入 `https://raw.githubusercontent.com/dmadison/ArduinoXInput_Boards/master/package_dmadison_xinput_index.json` ，如图所示。如果这一行里已经有其他的内容了，就追加到后面，以分号间隔开。
+
+![](img/4AF872F5-66ED-403F-9668-8D7AD8C9A4F6.png)
+
+然后打开 Boards Manager ，搜索并安装 XInput SparkFun Boards 。
+
+![](img/C669478A-9825-449B-BC53-AC3749E21E64.png)
+
+接下来再打开 Library Manager ，搜索并安装 XInput 库和 FastLED 库。
+
+![](img/5DD11E6F-D4BB-4D52-8B6E-4DE5271D5FEE.png)
+
+![](img/446A5C16-07A0-4C32-A101-41BE26E88EA4.png)
+
+然后，将装配好的 RhythKey Pro 的 USB-C 接口连接到电脑。  
+第一次刷入固件时不需要 RESET 按钮便可识别到暴露的 COM 端口，点击识别到串口旁边的笔图标，搜索并选中 `SparkFun Pro Micro w/ XInput` ，选中右侧对应的端口再选择 OK 。
+
+![](img/A767EAC8-6E66-4B97-9027-A1FE7ACB7AE0.png)
+
+![](img/CAFC25C6-4EF5-4317-B0F2-D91EAE2669FF.png)
+
+接下来（非常重要！）点击 Tools 选项卡，其中有一个 `Processor: ATMega32U4` 的选项，点击它，务必在弹出的菜单中选择 `ATMega32U4 (5V, 16 MHz)` 这一项，否则刷入固件后模块将无法被识别。
+
+![](img/4F5AFB17-A21A-4B92-8C3F-19AF3A24C8E1.png)
+
+然后打开仓库中的 `rhythkeyoro_fw.ino` 文件，点击左上角的 `Upload` 按钮，等待固件烧录完成。
+
+### 后续刷入
+
+由于在刷入初期固件之后 Pro Micro 模块会变成一个 XInput 设备，所以 Arduino IDE 将无法识别到它，此时需要按下 Pro Micro 模块的 RESET 按钮，使其重新进入 Bootloader 模式，再进行后续的固件烧录。
+
+这个 Bootloader 模式仅会持续 8 秒钟的时间，所以会很考验用户对电脑操作的熟练度。
+
+先打开 Arduino IDE ，按下 RESET 键一次，使模块进入 Bootloader 模式。  
+您需要在这 8 秒钟之内完成对模块端口和开发板类型的绑定设置（点击笔图标，选择端口，选择开发板类型）。  
+然后在模块不在 Bootloader 模式的情况下，点击 Upload 按钮，烧录固件。  
+在 Arduino IDE 完成固件编译后（如下图所示），显示 Uploading 时，立刻按一下 RESET 按钮，使其重新进入 Bootloader 模式，新固件才能被成功刷入。
+
+![](img/26B513CE-9E7E-43BD-9B95-F8A1E58A603F.png)
 
 ## 游戏设置
 
@@ -141,7 +181,7 @@ mouse=0
 
 ![](img/5417F45D-8848-4352-8696-1087133996B3.png)
 
-将两个旋钮分别绑定到控制器的摇杆 `X` 轴和 `Rx` 轴上，并启用 `Smooth Axis` ，然后退出设置，开始享受游戏。
+将两个旋钮分别绑定到控制器的摇杆 `X` 轴和 `Y` 轴上，并启用 `Smooth Axis` ，然后退出设置，开始享受游戏。
 
 ### DJMAX RESPECT V
 
