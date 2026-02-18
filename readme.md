@@ -2,6 +2,8 @@
 
 ![](doc/img/photo_2025-09-07_21-05-48.jpg)
 
+# [English readme](readme_en.md)
+
 ## 简介
 
 这是一款可以自行动手制作的迷你便携式音乐游戏控制器。  

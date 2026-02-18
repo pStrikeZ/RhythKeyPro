@@ -118,9 +118,9 @@
 
 然后打开仓库中的 `rhythkeyoro_fw.ino` 文件，点击左上角的 `Upload` 按钮，等待固件烧录完成。
 
-### 后续刷入
+### 固件升级
 
-由于在刷入 XInput 固件之后 Pro Micro 模块会变成一个 XInput 设备，所以 Arduino IDE 将无法识别到它，此时需要按下 Pro Micro 模块的 RESET 按钮，使其重新进入 Bootloader 模式，再进行后续的固件烧录。
+由于在刷入 XInput 固件之后 Pro Micro 模块会变成一个 XInput 设备，所以 Arduino IDE 将无法识别到它，此时需要按下 Pro Micro 模块的 RESET 按钮，使其重新进入 Bootloader 模式，再进行后续的固件升级。
 
 这个 Bootloader 模式仅会持续 8 秒钟的时间，所以会很考验用户对电脑操作的熟练度。
 
