@@ -21,10 +21,12 @@
 
 目前本项目的完成度达到了可以正常游玩的地步，但是还有一些提升空间：
 
-- [ ] 调整上盖模型的轴体卡扣部位厚度
+- [x] 调整上盖模型的轴体卡扣部位厚度
 - [ ] 编写一个软件 Wrapper 从音击的灯效 Pipe 中获取实时的灯效信息，  
 并编码成震动数据流推送到控制器的 RGB 灯组上实时变化
 - [ ] 微调旋钮的精度并摆脱 `Smooth Axis` 设置
+- [ ] 重绘一版将整块 PCB 分成两块版本的 EDA 工程文件，  
+绕过嘉立创的免费打样尺寸限制，降低打板成本
 
 不提供 ETA ，我也不知道完成这些改进需要花多少时间。
 
@@ -43,7 +45,7 @@
 本项目采用混合许可模式：
 
 * **外壳部分** (包括所有位于 `/case` 目录下的3D模型等文件)   
-由于并未对上游仓库进行任何更改，沿用上游的 [MIT License](case/LICENSE) 许可证。
+采用 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可证。
 * **PCB部分** (包括所有位于 `/pcb` 目录下的EDA文件, 原理图, PCB布局等文件)   
 采用 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可证。
 * **软件部分** (包括所有位于 `/firmware` 目录下的Arduino源代码)   
