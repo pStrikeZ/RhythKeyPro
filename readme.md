@@ -13,7 +13,7 @@
 * SOUND VOLTEX  
 * DJMAX RESPECT V
 * osu!mania
-* In Falsus
+* In Falsus Demo
 
 还有一些未经测试但理论上来说能玩的游戏，例如 osu 的其他模式、初音未来：歌姬计划等。
 
@@ -28,17 +28,17 @@
 - [ ] 重绘一版将整块 PCB 分成两块版本的 EDA 工程文件，  
 绕过嘉立创的免费打样尺寸限制，降低打板成本
 
-不提供 ETA ，我也不知道完成这些改进需要花多少时间。
+不提供 ETA ，我也不知道完成这些改进需要花多少时间。当然，如果您想要提交 PR ，我也热烈欢迎。
 
 ## 装配方法
 
 请移步 [手册](doc/readme.md) 进行详细步骤的查看。
 
-## 致谢 / 项目渊源 (Acknowledgements / Origin)
+## 致谢 / 项目渊源
 
 本项目是 [Rhythkey_V1](https://github.com/TheSiriusS233/Rhythkey_V1) 的一个彻底重构和升级的版本。  
 我们对原作者 [TheSiriusS233](https://github.com/TheSiriusS233) 的出色工作表示深深的敬意和感谢。  
-如果你对原始版本感兴趣，请访问其官方仓库。
+如果您对原始版本感兴趣，请访问其官方仓库。
 
 ## 许可证
 
