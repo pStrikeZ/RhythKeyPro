@@ -8,6 +8,8 @@ You can contact a friend with a 3D printer or use a paid 3D printing service on 
 
 The 3mf file with the `with Text` suffix is ​​a version with logos and memes. If your chosen 3D printing service provider supports multi-color material mixing printing, it is recommended to use this model file and fully inform the provider of the color configuration used when submitting the printing request.
 
+![](img/0DF8D29E-5A36-44F4-87DD-D1579D7350B3.png)
+
 ## PCB Printing
 
 You can use [JLCPCB EDA Pro](https://pro.lceda.cn/) to log in and import the `.epro2` format files located in the `/pcb` directory, export the Gerber files, and then go to JLCPCB's online PCB ordering service to print the PCB.
