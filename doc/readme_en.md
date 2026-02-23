@@ -6,6 +6,8 @@ Please go to [Releases](https://github.com/pStrikeZ/RhythKeyPro/releases) to dow
 or use your favorite 3D modeling software to open and modify the `.step` files in the `/case` directory.  
 You can contact a friend with a 3D printer or use a paid 3D printing service on the internet to print them.
 
+The 3mf file with the `with Text` suffix is ​​a version with logos and memes. If your chosen 3D printing service provider supports multi-color material mixing printing, it is recommended to use this model file and fully inform the provider of the color configuration used when submitting the printing request.
+
 ## PCB Printing
 
 You can use [JLCPCB EDA Pro](https://pro.lceda.cn/) to log in and import the `.epro2` format files located in the `/pcb` directory, export the Gerber files, and then go to JLCPCB's online PCB ordering service to print the PCB.
