@@ -147,6 +147,28 @@ enum EncoderDirection {
     DIR_COUNTER_CLOCKWISE = -1
 };
 
+// Rumble LED 协议常量
+// 颜色查找表：熄灭(0), 红(1), 绿(2), 蓝(3), 黄(4)
+const CRGB RUMBLE_COLOR_TABLE[5] = {
+    CRGB::Black,
+    CRGB::Red,
+    CRGB::Green,
+    CRGB::Blue,
+    CRGB(255, 255, 0)
+};
+
+// 被 rumble 动态控制的 LED 物理索引（左红/左绿/左蓝/右红/右绿/右蓝）
+const uint8_t DYNAMIC_LED_INDICES[6] = {
+    BTN_LEFT_RED,    // 2
+    BTN_LEFT_GREEN,  // 3
+    BTN_LEFT_BLUE,   // 4
+    BTN_RIGHT_RED,   // 7
+    BTN_RIGHT_GREEN, // 8
+    BTN_RIGHT_BLUE   // 9
+};
+
+const uint8_t DYNAMIC_LED_COUNT = 6;
+
 // 全局配置实例
 extern HardwareConfig hardwareConfig;
 extern GameConfig gameConfig;

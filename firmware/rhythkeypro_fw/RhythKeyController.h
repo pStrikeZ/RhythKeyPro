@@ -8,6 +8,7 @@
 #include "PotentiometerController.h"
 #include "ButtonMatrix.h"
 #include "ModeManager.h"
+#include "RumbleLEDReceiver.h"
 
 class RhythKeyController {
 public:

@@ -15,6 +15,10 @@ public:
     // 更新LED显示（接收当前模式对应的主题色数组）
     void update(const CRGB* theme);
 
+    // 更新LED显示，带动态覆盖层（rumble 解码的颜色覆盖指定位置）
+    void updateWithOverlay(const CRGB* theme, const volatile CRGB* overlay,
+                           const uint8_t* indices, uint8_t count);
+
     // 设置LED亮度
     void setBrightness(uint8_t brightness);
 
