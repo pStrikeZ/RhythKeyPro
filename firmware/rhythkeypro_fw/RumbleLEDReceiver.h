@@ -8,7 +8,10 @@
 
 // 音击灯效 Rumble 接收器
 // 通过 XInput 震动通道接收 PC 端编码的 LED 颜色数据。
-// 协议：0 = 无信号（维持当前色），1–125 = base-5 编码颜色（减 1 后解码），>125 = 忽略
+// 协议：0 = 忽略（系统重置无效），1–125 = base-5 编码颜色，126 = 清除覆盖层，>126 = 忽略
+// 超时机制：500ms 无有效数据自动恢复默认主题色（应对 wrapper 被强制终止）
+
+static const unsigned long RUMBLE_TIMEOUT_MS = 500;  // 心跳超时
 class RumbleLEDReceiver {
 public:
     RumbleLEDReceiver();
@@ -26,9 +29,13 @@ public:
     // 清除数据（模式切换时调用）
     void clearData();
 
+    // 主循环中调用：检查心跳超时，超时则自动清除覆盖层
+    void checkTimeout();
+
 private:
     volatile CRGB colors[DYNAMIC_LED_COUNT];
     volatile bool dataValid;
+    volatile unsigned long lastReceiveTime;  // 上次收到有效数据的时间戳
 
     // XInput 回调（静态，ISR 上下文）
     static void onReceive(uint8_t packetType);

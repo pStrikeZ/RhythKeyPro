@@ -38,7 +38,10 @@ void RhythKeyController::update() {
     // 5. 更新编码器
     encoderController.update();
 
-    // 6. 更新LED显示
+    // 6. 检查 rumble 心跳超时
+    rumbleLEDReceiver.checkTimeout();
+
+    // 7. 更新LED显示
     if (modeManager.isOngekiMode() && rumbleLEDReceiver.hasData()) {
         // ONGEKI 模式下有 rumble 数据：主题色打底 + 动态覆盖 6 颗灯
         ledController.updateWithOverlay(

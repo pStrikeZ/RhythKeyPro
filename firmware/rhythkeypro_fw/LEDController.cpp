@@ -1,11 +1,15 @@
 #include "LEDController.h"
+#include <string.h>  // memcmp, memcpy
 
-LEDController::LEDController() : leds(nullptr), initialized(false) {
+LEDController::LEDController() : leds(nullptr), prevLeds(nullptr), initialized(false) {
 }
 
 LEDController::~LEDController() {
     if (leds) {
         delete[] leds;
+    }
+    if (prevLeds) {
+        delete[] prevLeds;
     }
 }
 
@@ -13,7 +17,11 @@ void LEDController::begin() {
     if (initialized) return;
 
     leds = new CRGB[hardwareConfig.led.count];
-    if (!leds) return;
+    prevLeds = new CRGB[hardwareConfig.led.count];
+    if (!leds || !prevLeds) return;
+
+    // 初始化 prevLeds 为全黑之外的值，确保首次 show 一定触发
+    memset(prevLeds, 0xFF, sizeof(CRGB) * hardwareConfig.led.count);
 
     FastLED.addLeds<WS2812, 7, GRB>(leds, hardwareConfig.led.count)
         .setCorrection(TypicalLEDStrip);
@@ -26,7 +34,7 @@ void LEDController::update(const CRGB* theme) {
     if (!initialized || !leds) return;
 
     applyTheme(theme);
-    show();
+    showIfDirty();
 }
 
 void LEDController::updateWithOverlay(const CRGB* theme, const volatile CRGB* overlay,
@@ -46,7 +54,7 @@ void LEDController::updateWithOverlay(const CRGB* theme, const volatile CRGB* ov
         }
     }
 
-    show();
+    showIfDirty();
 }
 
 void LEDController::setBrightness(uint8_t brightness) {
@@ -54,7 +62,11 @@ void LEDController::setBrightness(uint8_t brightness) {
 
     hardwareConfig.led.brightness = brightness;
     FastLED.setBrightness(brightness);
-    show();
+    // 亮度变化不体现在 leds 数组中，需要强制刷新
+    FastLED.show();
+    if (prevLeds) {
+        memcpy(prevLeds, leds, sizeof(CRGB) * hardwareConfig.led.count);
+    }
 }
 
 void LEDController::applyTheme(const CRGB* theme) {
@@ -65,8 +77,14 @@ void LEDController::applyTheme(const CRGB* theme) {
     }
 }
 
-void LEDController::show() {
-    if (initialized) {
-        FastLED.show();
+void LEDController::showIfDirty() {
+    if (!initialized || !prevLeds) return;
+
+    // 比较当前 leds 和上次快照，相同则跳过
+    if (memcmp(leds, prevLeds, sizeof(CRGB) * hardwareConfig.led.count) == 0) {
+        return;
     }
+
+    FastLED.show();
+    memcpy(prevLeds, leds, sizeof(CRGB) * hardwareConfig.led.count);
 }

@@ -23,7 +23,6 @@ import ctypes.wintypes
 import subprocess
 import json
 import argparse
-import atexit
 import threading
 
 # ============================================================
@@ -36,6 +35,8 @@ ESCAPE_BYTE = 0xD0
 BOARD1_LED_COUNT = 6
 BOARD0_LED_COUNT = 61
 PIPE_READ_TIMEOUT = 3  # 秒，连接后无数据则重连
+RUMBLE_RESEND_INTERVAL = 0.05  # 秒，周期性重发震动值防止系统重置
+RUMBLE_CLEAR_CMD = 126  # 专用清除命令（固件侧忽略 0，只认 126）
 
 # 颜色枚举（与固件 RUMBLE_COLOR_TABLE 一致）
 COLOR_OFF    = 0
@@ -101,13 +102,15 @@ def load_xinput():
     return None
 
 
-def xinput_set_state(xinput_dll, player_index, left, right):
-    """设置震动状态。left/right 为 0–125 的协议值。
+def xinput_set_state(xinput_dll, player_index, left, right, toggle=0):
+    """设置震动状态。left/right 为 0–126 的协议值。
     XInputSetState 接受 WORD (0–65535)，XUSB 驱动会 >> 8 转为 uint8_t 发给控制器，
-    所以需要左移 8 位才能让控制器收到正确的值。"""
+    所以需要左移 8 位才能让控制器收到正确的值。
+    toggle: 0 或 1，写入 WORD 低位，绕过 XInput 对相同值的去重。
+    控制器只看高 8 位，低位被驱动丢弃。"""
     vib = XINPUT_VIBRATION()
-    vib.wLeftMotorSpeed = (left & 0xFF) << 8
-    vib.wRightMotorSpeed = (right & 0xFF) << 8
+    vib.wLeftMotorSpeed = ((left & 0xFF) << 8) | (toggle & 1)
+    vib.wRightMotorSpeed = ((right & 0xFF) << 8) | (toggle & 1)
     return xinput_dll.XInputSetState(player_index, ctypes.byref(vib))
 
 
@@ -288,7 +291,7 @@ def run_test_rumble(xinput_dll, player_index):
         time.sleep(2)
 
     # 清除信号
-    xinput_set_state(xinput_dll, player_index, 0, 0)
+    xinput_set_state(xinput_dll, player_index, RUMBLE_CLEAR_CMD, RUMBLE_CLEAR_CMD)
     print("\n  测试完成，已清除震动信号")
 
 
@@ -311,6 +314,10 @@ def run_wrapper(xinput_dll, player_index, monitor_only=False):
     # 用于主线程等待退出信号
     stop_event = threading.Event()
     frame_count = [0]  # 用列表以便线程内可修改
+
+    # 共享状态：当前 rumble 值（用于心跳重发）
+    rumble_lock = threading.Lock()
+    current_rumble = [0, 0]  # [left, right]，0 表示无数据
 
     def reader_thread():
         """后台线程：读 Pipe → 编码 → 发送震动"""
@@ -373,8 +380,11 @@ def run_wrapper(xinput_dll, player_index, monitor_only=False):
                         visual = format_leds(colors)
                         print(f"[{timestamp}] #{frame_count[0]:4d}  {visual}  → L={left_val:3d} R={right_val:3d}")
 
-                        # 发送震动
+                        # 发送震动并更新共享状态
                         if not monitor_only:
+                            with rumble_lock:
+                                current_rumble[0] = left_val
+                                current_rumble[1] = right_val
                             try:
                                 xinput_set_state(xinput_dll, player_index, left_val, right_val)
                             except Exception:
@@ -393,9 +403,38 @@ def run_wrapper(xinput_dll, player_index, monitor_only=False):
                     print("\n  [!] Pipe 断开，尝试重连...")
                     stop_event.wait(1)
 
+    # 心跳线程：发送 keepalive 刷新固件超时，防止 wrapper 被杀后灯效卡死
+    # 使用 127/128 交替：不在解码范围内但会刷新 lastReceiveTime
+    # 交替是为了绕过 XUSB 驱动对相同字节值的去重
+    KEEPALIVE_A = 127
+    KEEPALIVE_B = 128
+
+    def heartbeat_thread():
+        use_a = True
+        while not stop_event.is_set():
+            stop_event.wait(RUMBLE_RESEND_INTERVAL)
+            if stop_event.is_set():
+                break
+            if not monitor_only:
+                with rumble_lock:
+                    left, right = current_rumble
+                # 仅在有活跃颜色数据时发送 keepalive
+                if left > 0 or right > 0:
+                    ka = KEEPALIVE_A if use_a else KEEPALIVE_B
+                    use_a = not use_a
+                    try:
+                        xinput_set_state(xinput_dll, player_index, ka, ka)
+                    except Exception:
+                        pass
+
     # 启动读取线程
     thread = threading.Thread(target=reader_thread, daemon=True)
     thread.start()
+
+    # 启动心跳线程
+    if not monitor_only:
+        hb = threading.Thread(target=heartbeat_thread, daemon=True)
+        hb.start()
 
     # 主线程：等待 Ctrl+C（Event.wait 在 Windows 上可被 SIGINT 中断）
     try:
@@ -405,12 +444,6 @@ def run_wrapper(xinput_dll, player_index, monitor_only=False):
         pass
     finally:
         stop_event.set()
-        # 清除震动
-        if not monitor_only and xinput_dll:
-            try:
-                xinput_set_state(xinput_dll, player_index, 0, 0)
-            except Exception:
-                pass
         print(f"\n\n  总计处理: {frame_count[0]} 帧")
         print("  已退出。")
 
@@ -452,11 +485,6 @@ def main():
         player_index = find_player_index(xinput_dll)
         if player_index is None:
             sys.exit(1)
-
-    # 注册退出清理
-    def cleanup():
-        xinput_set_state(xinput_dll, player_index, 0, 0)
-    atexit.register(cleanup)
 
     if args.test_rumble:
         run_test_rumble(xinput_dll, player_index)

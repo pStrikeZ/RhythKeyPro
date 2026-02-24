@@ -27,13 +27,14 @@ public:
 
 private:
     CRGB* leds;
+    CRGB* prevLeds;  // 上一次 show() 的快照，用于脏检测
     bool initialized;
 
     // 应用LED主题
     void applyTheme(const CRGB* theme);
 
-    // 显示更新
-    void show();
+    // 脏检测后刷新：仅在 LED 数据变化时调用 FastLED.show()
+    void showIfDirty();
 };
 
 #endif // LED_CONTROLLER_H
