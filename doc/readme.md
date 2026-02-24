@@ -146,6 +146,8 @@
 
 ### 音击
 
+首先切换到 ONGEKI 模式。
+
 打开 `segatools.ini` ，调整好其他设置，滚动到配置文件的末尾。
 
 ```ini
@@ -162,7 +164,23 @@ coin=0x72
 mouse=0
 ```
 
-将 `mouse` 项更改为 `0` ，然后启动游戏，按 `F1` 进入测试模式，选择 `レバー設定` 并进入。
+将 `mouse` 项更改为 `0` ，然后保存配置文件。
+
+然后打开 `start.bat` ，在 `start "AM Daemon"` 所在的行后面添加这行内容：
+
+```cmd
+start "LED Sync" /min python "ongeki_led_reader.py"
+```
+
+以及 `taskkill /f /im amdaemon.exe` 所在的行后面添加这行内容：
+
+```
+taskkill /f /fi "WINDOWTITLE eq LED Sync" > nul 2>&1
+```
+
+保存 `start.bat` 文件。最后，把 [tools/ongeki_led_reader.py](../tools/ongeki_led_reader.py) 文件复制到 `start.bat` 所在的目录中。
+
+启动游戏，按 `F1` 进入测试模式，选择 `レバー設定` 并进入。
 
 ![](img/A0AC07B9-7E17-4014-87DB-FF74D8B1B509.png)
 
