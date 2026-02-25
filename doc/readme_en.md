@@ -146,6 +146,8 @@ In VARIOUS mode, the side keys and menu keys will be directly disabled to preven
 
 ### ONGEKI
 
+First switch to ONGEKI mode.
+
 Open `segatools.ini`, adjust other settings, and scroll to the end of the configuration file.
 
 ```ini
@@ -162,7 +164,23 @@ coin=0x72
 mouse=0
 ```
 
-Change the `mouse` item to `0`, then start the game, press `F1` to enter test mode, select `レバー設定` (Lever Settings) and enter.
+Change the `mouse` item to `0`, then save the configuration file.
+
+Then open `start.bat`, and add this line after the line containing `start "AM Daemon"`:
+
+```cmd
+start "LED Sync" /min python "ongeki_led_reader.py"
+```
+
+And add this line after the line containing `taskkill /f /im amdaemon.exe`:
+
+```cmd
+taskkill /f /fi "WINDOWTITLE eq LED Sync" > nul 2>&1
+```
+
+Save the `start.bat` file. Finally, copy the [tools/ongeki_led_reader.py](../tools/ongeki_led_reader.py) file to the directory where `start.bat` is located.
+
+Start the game, press `F1` to enter test mode, select `レバー設定` (Lever Settings) and enter.
 
 ![](img/A0AC07B9-7E17-4014-87DB-FF74D8B1B509.png)
 

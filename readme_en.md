@@ -6,10 +6,10 @@
 
 ## Introduction
 
-This is a DIY mini portable music game controller.  
-It controls music games by simulating an Xbox 360 controller.
+This is a DIY mini portable rhythm game controller.  
+It controls rhythm games by simulating an Xbox 360 controller based on an `ATmega32U4` Arduino module.
 
-Supported music game list:
+Supported rhythm game list:
 
 *   ONGEKI
 *   SOUND VOLTEX
@@ -24,17 +24,32 @@ There are also some untested games that should theoretically work, such as other
 Currently, the project is complete enough for normal gameplay, but there is still room for improvement:
 
 - [x] Adjust the thickness of the switch clip part of the top case model
-- [ ] Write a software wrapper to get real-time lighting information from ONGEKI's lighting effect pipe,  
-and encode it into vibration data streams to push to the controller's RGB LEDs for real-time changes
+- [x] Write a software wrapper to get real-time lighting information from ONGEKI's lighting effect pipe, and encode it into vibration data streams to push to the controller's RGB LEDs for real-time changes
 - [ ] Fine-tune the precision of the knob and eliminate the need for `Smooth Axis` settings
-- [ ] Redraw the EDA project files to split the PCB into two parts,  
-bypassing JLCPCB's free prototyping size limit and reducing the board production cost
+- [ ] Redraw the EDA project files to split the PCB into two parts, bypassing JLCPCB's free prototyping size limit and reducing the board production cost
 
 No ETA is provided; I don't know how long these improvements will take. Of course, PRs are warmly welcomed.
 
 ## Assembly Guide
 
 Please refer to the [Manual](doc/readme_en.md) for detailed steps.
+
+## Why Not ESP32?
+
+The core function of this project is to simulate an Xbox 360 controller (an XInput device), which requires the main control chip to have **native USB Device** capability and the ability to customize device descriptors.
+
+`ATmega32U4` has a hardware-level USB controller. With the [ArduinoXInput](https://github.com/dmadison/ArduinoXInput) library, it can directly enumerate the device as an XInput controller, plug-and-play and driver-free on Windows. This is the decisive reason for choosing it for this project.
+
+As for the ESP32 series:
+
+* **ESP32-C3**: Only has a USB Serial/JTAG interface and **does not support USB Device mode**. It can only simulate a controller via Bluetooth, and honestly, playing rhythm games with a Bluetooth controller is just having too much free time on your hands.
+* **ESP32-S2 / S3**: Supports USB OTG and theoretically can implement XInput via TinyUSB, but requires writing custom USB descriptors and protocol stack adaptation. The development complexity is far higher than the mature solution of ATmega32U4.
+
+In terms of performance, the workload of this project (button matrix scanning, encoder reading, ADC sampling, WS2812 driving, XInput reporting) is more than enough for a 16MHz AVR, with no performance bottlenecks.
+
+Considering compatibility, development costs, and ecosystem maturity comprehensively, `ATmega32U4` is the optimal choice for USB game controller projects.
+
+If you just can't stand Arduino, you are welcome to fork the project and change it yourself.
 
 ## Acknowledgements / Project Origins
 
