@@ -35,8 +35,10 @@ void RhythKeyController::update() {
     // 4. 处理电位器（模式感知）
     potController.update(modeManager.getMode());
 
-    // 5. 更新编码器
-    encoderController.update();
+    // 5. 更新编码器 (仅在 VARIOUS 模式下工作)
+    if (!modeManager.isOngekiMode()) {
+        encoderController.update();
+    }
 
     // 6. 检查 rumble 心跳超时
     rumbleLEDReceiver.checkTimeout();
