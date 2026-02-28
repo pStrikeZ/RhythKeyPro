@@ -45,6 +45,10 @@ void EncoderController::resetPositions() {
     encoder2.position = 0;
     leftJoystickX = 0;
     leftJoystickY = 0;
+
+    // 强制发送清零后的状态到主机
+    XInput.setJoystickX(JOY_LEFT, 0);
+    XInput.setJoystickY(JOY_LEFT, 0);
 }
 
 void EncoderController::updateSingleEncoder(EncoderState& encoder, uint8_t pinA, uint8_t pinB) {
