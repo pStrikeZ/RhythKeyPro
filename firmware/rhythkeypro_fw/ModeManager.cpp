@@ -1,6 +1,7 @@
 #include "ModeManager.h"
+#include "BrightnessManager.h"
 
-ModeManager::ModeManager() : currentMode(MODE_ONGEKI), modeChanged(false) {
+ModeManager::ModeManager() : currentMode(MODE_ONGEKI), modeChanged(false), brightnessManager(nullptr) {
     // 初始化长按状态
     for (uint8_t i = 0; i < 2; i++) {
         longPressState[i].pressStartTime = 0;
@@ -15,6 +16,11 @@ void ModeManager::processButtons(const bool currentState[3][6], const bool prevS
             // 切换键：检测模式切换
             if (row == TOGGLE_ROW && col == TOGGLE_COL) {
                 handleToggle(currentState[row][col], prevState[row][col]);
+                continue;
+            }
+
+            // 亮度键：检测亮度调节（下降沿触发，不区分模式）
+            if (handleBrightnessKey(currentState[row][col], prevState[row][col], row, col)) {
                 continue;
             }
 
@@ -158,4 +164,26 @@ const CRGB* ModeManager::getLEDTheme() const {
     return (currentMode == MODE_ONGEKI) ?
         gameConfig.ledTheme.ongeki :
         gameConfig.ledTheme.various;
+}
+
+bool ModeManager::handleBrightnessKey(bool currentState, bool previousState, uint8_t row, uint8_t col) {
+    if (!brightnessManager) return false;
+
+    const auto& bk = gameConfig.brightnessKeys;
+
+    bool isDecrease = (row == bk.decreaseRow && col == bk.decreaseCol);
+    bool isIncrease = (row == bk.increaseRow && col == bk.increaseCol);
+
+    if (!isDecrease && !isIncrease) return false;
+
+    // 下降沿触发（LOW = 按下，HIGH -> LOW = 刚按下）
+    if (currentState == LOW && previousState == HIGH) {
+        if (isDecrease) {
+            brightnessManager->decrease();
+        } else {
+            brightnessManager->increase();
+        }
+    }
+
+    return true;  // 已拦截，不传递给 sendButtonEvent
 }

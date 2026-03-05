@@ -4,6 +4,8 @@
 void RhythKeyController::begin() {
     // 初始化各模块
     ledController.begin();
+    brightnessManager.begin();
+    ledController.setBrightness(brightnessManager.getBrightness());
     encoderController.begin();
     potController.begin();
     buttonMatrix.begin();
@@ -14,6 +16,9 @@ void RhythKeyController::begin() {
 
     // 初始化 Rumble LED 接收器（注册 XInput 回调）
     rumbleLEDReceiver.begin();
+
+    // 将亮度管理器注入给模式管理器
+    modeManager.setBrightnessManager(&brightnessManager);
 
     // 初始化LED显示
     ledController.update(modeManager.getLEDTheme());
@@ -43,7 +48,10 @@ void RhythKeyController::update() {
     // 6. 检查 rumble 心跳超时
     rumbleLEDReceiver.checkTimeout();
 
-    // 7. 更新LED显示
+    // 7. 非阻塞检查亮度防抖保存
+    brightnessManager.tick();
+
+    // 8. 更新LED显示
     if (modeManager.isOngekiMode() && rumbleLEDReceiver.hasData()) {
         // ONGEKI 模式下有 rumble 数据：主题色打底 + 动态覆盖 6 颗灯
         ledController.updateWithOverlay(

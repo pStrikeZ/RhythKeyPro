@@ -6,12 +6,17 @@
 #include <FastLED.h>
 #include "Config.h"
 
+class BrightnessManager;  // 前向声明
+
 class ModeManager {
 public:
     ModeManager();
     ~ModeManager() = default;
 
-    // 处理按钮矩阵的所有事件（含切换键检测 + 过滤 + XInput 发送）
+    // 设置亮度管理器引用
+    void setBrightnessManager(BrightnessManager* mgr) { brightnessManager = mgr; }
+
+    // 处理按钮矩阵的所有事件（含切换键检测 + 亮度调节 + 过滤 + XInput 发送）
     void processButtons(const bool currentState[3][6], const bool prevState[3][6]);
 
     // 获取当前模式对应的 LED 主题色数组
@@ -27,6 +32,7 @@ public:
 private:
     ControllerMode currentMode;
     bool modeChanged;
+    BrightnessManager* brightnessManager;  // 由 RhythKeyController 注入
 
     // 切换键在矩阵中的坐标
     static const uint8_t TOGGLE_ROW = 0;
@@ -55,6 +61,9 @@ private:
     // 长按按键处理
     int8_t getLongPressIndex(uint8_t row, uint8_t col) const;
     void handleLongPressButton(bool currentState, uint8_t row, uint8_t col, uint8_t index);
+
+    // 亮度键处理（返回 true 表示已处理，应跳过后续逻辑）
+    bool handleBrightnessKey(bool currentState, bool previousState, uint8_t row, uint8_t col);
 };
 
 #endif // MODE_MANAGER_H

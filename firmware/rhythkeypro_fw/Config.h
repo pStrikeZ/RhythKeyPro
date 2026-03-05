@@ -117,6 +117,12 @@ struct GameConfig {
         uint8_t count = 2;
         unsigned long holdDuration = 3000; // 毫秒
     } longPress;
+
+    // 亮度调节键配置（矩阵坐标）
+    struct BrightnessKeys {
+        uint8_t decreaseRow = 0;  uint8_t decreaseCol = 0;  // (0,0) → 亮度降低
+        uint8_t increaseRow = 0;  uint8_t increaseCol = 1;  // (0,1) → 亮度增加
+    } brightnessKeys;
 };
 
 // 枚举定义

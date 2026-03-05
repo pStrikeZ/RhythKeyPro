@@ -9,6 +9,7 @@
 #include "ButtonMatrix.h"
 #include "ModeManager.h"
 #include "RumbleLEDReceiver.h"
+#include "BrightnessManager.h"
 
 class RhythKeyController {
 public:
@@ -31,6 +32,7 @@ private:
     PotentiometerController potController;
     ButtonMatrix buttonMatrix;
     ModeManager modeManager;
+    BrightnessManager brightnessManager;
 };
 
 #endif // RHYTHKEY_CONTROLLER_H
