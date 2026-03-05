@@ -241,6 +241,8 @@ taskkill /f /fi "WINDOWTITLE eq LED Sync" > nul 2>&1
 
 保存 `start.bat` 文件。最后，把 [tools/ongeki_led_reader.py](../tools/ongeki_led_reader.py) 文件复制到 `start.bat` 所在的目录中。
 
+如果你没有安装 Python ，可以从 [python.org](https://www.python.org/) 下载安装。
+
 启动游戏，按 `F1` 进入测试模式，选择 `レバー設定` 并进入。
 
 ![](img/A0AC07B9-7E17-4014-87DB-FF74D8B1B509.png)
