@@ -6,7 +6,7 @@ Please go to [Releases](https://github.com/pStrikeZ/RhythKeyPro/releases) to dow
 or use your favorite 3D modeling software to open and modify the `.step` files in the `/case` directory.  
 You can contact a friend with a 3D printer or use a paid 3D printing service on the internet to print them.
 
-The 3mf file with the `with Text` suffix is ​​a version with logos and memes. If your chosen 3D printing service provider supports multi-color material mixing printing, it is recommended to use this model file and fully inform the provider of the color configuration used when submitting the printing request.
+The 3mf file with the `with Text` suffix is a version with logos and memes. If your chosen 3D printing service provider supports multi-color material mixing printing, it is recommended to use this model file and fully inform the provider of the color configuration used when submitting the printing request.
 
 ![](img/0DF8D29E-5A36-44F4-87DD-D1579D7350B3.png)
 
@@ -26,9 +26,10 @@ First, you need to purchase the electronic components for the BOM. The list of t
 
 ### Mandatory Accessories
 
-* 1x [Sparkfun Arduino Pro Micro](https://www.sparkfun.com/pro-micro-3-3v-8mhz.html)  
-It can also be a compatible version produced by other manufacturers, as long as it is a module equipped with the ATMega32U4 main control chip.  
+* 1x [Sparkfun Arduino Pro Micro 5V/16MHz](https://www.sparkfun.com/pro-micro-5v-16mhz.html)  
+It can also be a compatible version produced by other manufacturers, as long as it is a module equipped with the ATMega32U4 main control chip running at 5V and 16MHz.  
 Do not buy the version using the Mini-USB interface, as its PCB size does not match our PCB, ~~and I believe you should find it hard to find such a data cable in 2026~~.  
+Do not buy the 3.3V / 8MHz version, as its operating voltage is incompatible with other components on the PCB, and its clock frequency is only half that of the 5V version, which will affect the module's performance.  
 It is recommended to buy a version with pre-soldered pins for convenient and quick use.
 * 12x Your favorite 5-pin mechanical keyboard switches  
 When I was improving the design of this rhythm game controller, a friend asked me if I could use optical switches or electrostatic capacitive switches to improve the absolute gaming experience in rhythm game scenarios.  
@@ -37,22 +38,37 @@ Regrettably, the answer is no. The actuation force / travel distance adjustment 
 * 8x 1U size mechanical keyboard keycaps and 4x 2.75U size mechanical keyboard keycaps
 * 4x 2U size mechanical keyboard stabilizers  
 Most of the time, you will be bundled by the seller with a 6.5U or 7U length stabilizer suitable for the space bar of a mechanical keyboard, which is normal.
-* 2x ALPS EC11 series rotary potentiometers and 2 potentiometer knobs  
-The EC11 potentiometers imported from the original ALPS brand have two versions: `EC11E09244BS` with detents and `EC11E1834403` without detents.  
-I have purchased both versions of the potentiometers, and I strongly recommend buying the `EC11E1834403` model without detents. Because the potentiometer with detents has a strong tactile bump every time it is rotated, it will feel very strange when playing rhythm games that require knob turning (SOUND VOLTEX).  
-The EC11 series potentiometers imported from Japan are very expensive. You can buy low-cost domestic alternative EC11 potentiometers, but I cannot guarantee the gaming experience when using such third-party potentiometers.  
-When purchasing potentiometer knobs, please ensure that the internal shape of the knob is consistent.
-* 1x ALPS B10K 75mm slide potentiometer and 1 slide potentiometer fader cap  
-You can also buy a domestic alternative version of the B10K 75mm slide potentiometer, but I cannot guarantee the gaming experience when using such third-party potentiometers.
+* 2x EC11 rotary encoders and 2 matching knob caps  
+  > **⚠️ Note:** The SOUND VOLTEX knob section of this project uses **rotary encoders**, which output digital pulse signals. Do not confuse them with traditional potentiometers that output analog signals.
+  
+  There are two main assembly options for encoder selection. Considering gameplay feel and assembly cost, **this project strongly recommends Option A (third-party encoder with detent removal modification)**.
+  
+  **Option A: Third-party EC11 encoder + physical modification (author recommended)**  
+  Since ALPS imported encoders are very expensive (approximately 7.5x the cost of domestic encoders), using common third-party/domestic EC11 encoders is an excellent alternative.
+  * **Purchasing:** Simply select any commonly available low-cost EC11 encoder (they typically come with physical detents).
+  * **Modification:** Encoders with detents produce noticeable resistance bumps during rotation, which greatly affects the SDVX gameplay experience. It is recommended to perform a physical modification before soldering: **Use a tool to open the metal casing of the encoder, and completely flatten the spring metal tab that contacts the gear wheel inside, to eliminate the physical detent feel.**
+  ![](img/photo_2026-02-27_02-02-59.jpg)
+  * **Experience:** After modification, the encoder will be in an ultra-low friction state due to the lack of high-viscosity damping grease inside. This lightweight and inertia-carrying smooth feel actually closely resembles the gameplay experience of arcade original photoelectric encoders. The downside is that mechanical contact lifespan is relatively limited — if signal jitter occurs after several months of intensive use, simply replace the encoder.
+  
+  **Option B: ALPS original EC11 encoder (detent-free version)**  
+  If you prefer not to perform any physical modification, you can purchase the original ALPS imported EC11 encoders from Japan.
+  * **Purchasing:** ALPS offers two versions: `EC11E09244BS` with detents and `EC11E1834403` with smooth detent-free rotation. **Be sure to choose the smooth detent-free version (`EC11E1834403`).**
+  * **Experience:** The ALPS original detent-free encoder has high-quality damping grease inside to improve rotational precision. This results in significantly higher rotational resistance compared to standard encoders. In SDVX scenarios that require fast, high-frequency knob spinning, this produces a noticeable sticky and fatiguing feel. Therefore, from a practical gameplay perspective, it is not the primary recommendation.
+  
+  **Knob cap purchasing tip:** The metal shaft of EC11 encoders typically comes in two types: **half-round shaft (D-type)** and **splined shaft (knurled/gear-type)**. When purchasing matching metal knob caps, make sure to confirm that the internal bore shape of the knob cap exactly matches the shaft type of your encoder, otherwise it will not fit properly.
+* 1x ALPS B10K 60/75mm dual-gang slide potentiometer and 1 slide potentiometer fader cap  
+I have purchased both domestic and ALPS imported dual-gang potentiometers. The domestic option's feel and performance are not inferior to the imported parts at all, so the domestic option is recommended — it can also save you 7.5x the money.  
+However, note that domestic single-gang slide potentiometers not only have different specifications from dual-gang potentiometers, but also have far worse quality control. Please pay attention to model numbers when purchasing, and if the seller ships the wrong product, apply for after-sales service promptly.
+  > It is recommended to purchase potentiometer and encoder knob caps from the same shop where you buy the potentiometers and encoders, which usually saves on shipping costs.
 * 7x 6mm*6mm SMD tactile push button switches, button height 7.5mm
 * 4x R0805 10KΩ SMD resistors
 * 16x R0805 100nF SMD capacitors
 * 1x R0805 330Ω SMD resistor
 * 12x R0805 1Ω SMD resistors
-* 12x WS2812 reverse-mount RGB LED beads  
-Be sure to buy the reverse-mount version of the beads, otherwise they cannot be soldered to the PCB.
+* 12x WS2812 3528 package reverse-mount RGB LED beads  
+Note the search keyword: `SK6812MINI-E` is the correctly packaged reverse-mount version.  
+WS2812 is originally a WorldSemi product, but its native package is the front-mount 5050 size. In the custom keyboard community, the most commonly used reverse-mount RGB LED is the SK6812MINI-E.
 * 18x R1206 1N4148 switching diodes
-* 3x 1N4007 SMA diodes
 * 6x M2*8 self-tapping screws
 * 5x M2*16 self-tapping screws
 * Soldering iron with adjustable temperature, solder wire, soldering flux, rosin, **and a pair of curved tweezers**  
@@ -61,7 +77,7 @@ Be sure to buy the reverse-mount version of the beads, otherwise they cannot be 
 ### Optional Accessories
 
 * 2x 2.54mm single-row female headers  
-If you do not consider the hot-swappable feature of the module, you can solder the module directly to the motherboard, although I do not recommend doing so.
+If you do not consider the hot-swappable feature of the module, you can solder the module directly to the motherboard.
 * 6x 6mm thick rubber feet  
 When using header sockets to connect the Arduino module, the height of the module will exceed the thickness of the 3D printed parts, so several feet are needed to raise it. Raising the knob side by 12mm and the user side by 6mm is sufficient.
 * 12x Mechanical switch pads  
@@ -135,14 +151,58 @@ After the Arduino IDE completes firmware compilation (as shown in the figure bel
 
 ![](img/26B513CE-9E7E-43BD-9B95-F8A1E58A603F.png)
 
+## Feature Overview
+
+### Key Mapping
+
+The mechanical switch keys on this controller are mapped to XInput buttons as follows:
+
+| Mechanical Switch Key | XInput Button |
+|---|---|
+| Left/Right Side Keys | Left/Right Bumpers |
+| Left/Right Menu Keys | Left/Right Menu Buttons |
+| Left 3 Main Keys | D-PAD Left/Up/Right |
+| Right 3 Main Keys | X/Y/B |
+| Left Ground Key | D-PAD Down |
+| Right Ground Key | A |
+| Left Knob Press | LS |
+| Right Knob Press | RS |
+
+### Auxiliary Function Keys
+
+There is a row of SMD buttons at the bottom of the controller, from left to right:
+
+* RGB LED Brightness Decrease
+* RGB LED Brightness Increase  
+  (Note: The system features non-volatile power-off memory. After you finish adjusting brightness and the controller idles for approximately 3 seconds, the system will automatically debounce and smoothly save the setting to the internal EEPROM, avoiding frequent writes that wear out the chip, and the brightness will be automatically restored on next power-up)
+* LS Key  
+  (Note: Hardwired in parallel with the left knob press at the circuit level; cannot be changed via software)
+* RESET Key
+* Undefined
+* Mode Switch
+
+This controller defines two modes: ONGEKI mode and VARIOUS mode. The two modes have different lighting effects and behaviors.
+
+In ONGEKI mode:
+
+* All mechanical switch keys are available, but the two menu keys need to be held for 3 seconds to be triggered
+* The slide potentiometer is mapped to the linear triggers — with the center position as the boundary, sliding left activates the left linear trigger, and sliding right activates the right linear trigger
+* Changing RGB LED color effects via the vibration motor data channel is available  
+  (Note: Thanks to firmware-level directional filtering optimization, the system proactively immunizes against the global vibration reset `(0,0)` signal triggered by system-level events such as Windows focus loss or pressing the Win key, fundamentally eliminating jarring lighting flicker during gameplay)
+* Rotary encoders are completely disabled to prevent accidental input during gameplay
+
+In VARIOUS mode:
+
+* Side keys and menu keys are completely disabled to prevent accidental input during gameplay, and their corresponding LEDs will also turn off
+* The slide potentiometer is mapped to the X axis of the right stick
+* Changing RGB LED color effects via the vibration motor data channel is not available
+* The left and right rotary encoders are mapped to the X axis and Y axis of the left stick respectively
+
+When switching between the two modes, all stick and linear trigger values are cleared to prevent anomalies during gameplay. If the slide potentiometer is not at the center position when switching modes, its mapped target will remain at the center position until the reading changes, at which point the potentiometer's position will be reflected in the mapped target value.
+
 ## Game Settings
 
 **Disclaimer**: This project does not provide installation files for any games or tutorials on how to use the games themselves.
-
-Press the SMD button in the lower right corner of the controller panel to switch between ONGEKI mode and VARIOUS mode.
-
-In ONGEKI mode, the menu key needs to be pressed and held for 3 seconds to be triggered;  
-In VARIOUS mode, the side keys and menu keys will be directly disabled to prevent accidental touches during the game.
 
 ### ONGEKI
 
@@ -180,6 +240,8 @@ taskkill /f /fi "WINDOWTITLE eq LED Sync" > nul 2>&1
 
 Save the `start.bat` file. Finally, copy the [tools/ongeki_led_reader.py](../tools/ongeki_led_reader.py) file to the directory where `start.bat` is located.
 
+If you don't have Python installed, you can download and install it from [python.org](https://www.python.org/).
+
 Start the game, press `F1` to enter test mode, select `レバー設定` (Lever Settings) and enter.
 
 ![](img/A0AC07B9-7E17-4014-87DB-FF74D8B1B509.png)
@@ -202,7 +264,10 @@ After binding the buttons, switch to the `Analogs` tab.
 
 ![](img/5417F45D-8848-4352-8696-1087133996B3.png)
 
-Bind the two knobs to the `X` axis and `Y` axis of the controller stick respectively, and enable `Smooth Axis`, then exit the settings and start enjoying the game.
+Bind the two knobs to the `X` axis and `Y` axis of the controller stick respectively, and enable `Smooth Axis`.  
+(Note: Since the A/B phase output of domestic EC11 encoders may be reversed compared to ALPS original parts, if you find that the knob rotation direction is completely opposite to the in-game direction during testing, simply check the corresponding `Invert Axis` option in this interface to perform a software inversion — no need to recompile the firmware or change hardware wiring.)
+
+Then exit the settings and start enjoying the game.
 
 ### DJMAX RESPECT V
 

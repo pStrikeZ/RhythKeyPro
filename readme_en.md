@@ -11,7 +11,8 @@ It controls rhythm games by simulating an Xbox 360 controller based on an `ATmeg
 
 Supported rhythm game list:
 
-*   ONGEKI
+*   ONGEKI  
+    *Even supports RGB lighting effects synced with in-game events*
 *   SOUND VOLTEX
 *   DJMAX RESPECT V
 *   osu!mania
@@ -70,3 +71,7 @@ This project uses a hybrid licensing model:
 
 In short, you are welcome to learn from, modify, and share this project for non-commercial purposes. However, using the hardware design of this project directly for any commercial production or sales is strictly prohibited.  
 Also, please do not use this project to manufacture units for others for profit (commission-based), as this also violates our terms.
+
+## External Links
+
+* [MakerWorld](https://makerworld.com.cn/zh/models/2232554)
